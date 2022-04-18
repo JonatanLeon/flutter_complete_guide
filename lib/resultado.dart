@@ -30,7 +30,11 @@ class Resultado extends StatelessWidget {
             style: TextStyle(fontSize: 36, fontWeight: FontWeight.bold),
             textAlign: TextAlign.center,
           ),
-          RaisedButton(
+          OutlinedButton(
+              style: OutlinedButton.styleFrom(
+                primary: Colors.orange,
+                side: BorderSide(color: Colors.orange)
+              ),
               onPressed: reiniciarCuestionario,
               child: Text("Reiniciar cuestionario")),
         ],
