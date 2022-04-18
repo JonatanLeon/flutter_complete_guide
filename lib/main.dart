@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import './resultado.dart';
+import './cuestionario.dart';
 
 void main() => runApp(MyApp());
 
@@ -11,52 +13,72 @@ class MyApp extends StatefulWidget {
 
 class MyAppState extends State<MyApp> {
   var posicionPregunta = 0;
+  var puntuacionTotal = 0;
 
-  void responderPregunta1() {
+  final _preguntas = const [
+    {
+      "textoPregunta": "¿Cuál es tu color favorito?",
+      "respuestas": [
+        {"texto": "Negro", "puntuacion": 1},
+        {"texto": "Rojo", "puntuacion": 3},
+        {"texto": "Verde", "puntuacion": 5},
+        {"texto": "Blanco", "puntuacion": 10}
+      ]
+    },
+    {
+      "textoPregunta": "¿Cuál es tu animal favorito?",
+      "respuestas": [
+        {"texto": "Gato", "puntuacion": 1},
+        {"texto": "Perro", "puntuacion": 3},
+        {"texto": "Conejo", "puntuacion": 5},
+        {"texto": "Serpiente", "puntuacion": 10}
+      ]
+    },
+    {
+      "textoPregunta": "¿Qué curso estudias?",
+      "respuestas": [
+        {"texto": "SMR 1", "puntuacion": 1},
+        {"texto": "SMR 2", "puntuacion": 3},
+        {"texto": "DAM 1", "puntuacion": 5},
+        {"texto": "DAM 2", "puntuacion": 10}
+      ]
+    },
+  ];
+
+  void reiniciarCuestionario() {
     setState(() {
       posicionPregunta = 0;
+      puntuacionTotal = 0;
     });
-    print(posicionPregunta);
   }
 
-  void responderPregunta2() {
+  void responderPregunta(int puntuacion) {
+    puntuacionTotal += puntuacion;
     setState(() {
-      posicionPregunta = 1;
+      posicionPregunta = posicionPregunta + 1;
     });
     print(posicionPregunta);
+    if (posicionPregunta < _preguntas.length) {
+      print("Hay más preguntas");
+    } else {
+      print("Ya no hay más preguntas");
+    }
   }
 
   @override
   Widget build(BuildContext context) {
-    var preguntas = [
-      "¿Cuál es tu color favorito?",
-      "¿Cuál es tu animal favorito?",
-    ];
     return MaterialApp(
       home: Scaffold(
         appBar: AppBar(
           title: Text("My First App"),
         ),
-        body: Column(
-          children: <Widget>[
-            Text(
-              preguntas[posicionPregunta],
-            ),
-            RaisedButton(
-              child: Text("Respuesta 1"),
-              // El paréntesis solo es una función anónima
-              onPressed: responderPregunta1,
-            ),
-            RaisedButton(
-              child: Text("Respuesta 2"),
-              onPressed: responderPregunta1,
-            ),
-            RaisedButton(
-              child: Text("Respuesta 3"),
-              onPressed: responderPregunta2,
-            ),
-          ],
-        ),
+        body: posicionPregunta < _preguntas.length
+            ? Cuestionario(
+                responderPregunta: responderPregunta,
+                posicionPregunta: posicionPregunta,
+                preguntas: _preguntas,
+              )
+            : Resultado(puntuacionTotal, reiniciarCuestionario),
       ),
     );
     throw UnimplementedError();
